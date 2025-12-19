@@ -9,14 +9,14 @@ import { TextField, Button, Box } from "@mui/material";
 
 export default function MainForm({ onSubmit }) {
   const [product, setProduct] = useState("");
-  const [zone, setZone] = useState("");
+  const [location, setLocation] = useState("");
   const [event, setEvent] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ product, zone, event });
+    onSubmit({ product, location, event });
 setProduct("");
-setZone("");
+setLocation("");
 setEvent("");
   };
 
@@ -35,9 +35,9 @@ setEvent("");
       />
 
       <TextField
-        label="Zone"
-        value={zone}
-        onChange={(e) => setZone(e.target.value)}
+        label="Location"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
         fullWidth
         margin="normal"
       />
