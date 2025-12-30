@@ -1,9 +1,8 @@
 import { useRef, useState } from "react";
 
-export function useSpeechRecognition() {
+export function useSpeechRecognition({ onResult }) {
   const recognitionRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState("");
 
   const startListening = () => {
     const SpeechRecognition =
@@ -23,7 +22,7 @@ export function useSpeechRecognition() {
 
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
-      setTranscript(text);
+      onResult?.(text);
     };
 
     recognition.onend = () => setIsListening(false);
@@ -42,10 +41,8 @@ export function useSpeechRecognition() {
   };
 
   return {
-    transcript,
     isListening,
     startListening,
     stopListening,
-    setTranscript
   };
 }

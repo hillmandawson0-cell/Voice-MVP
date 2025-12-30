@@ -7,9 +7,10 @@ Calling API functions
 */
 
 import { useState } from "react";
-import { TextField, Button, Container, Stack } from "@mui/material";
+import { Container, Stack, Button } from "@mui/material";
 import { sendEvent } from "./components/hooks/api/transcribe.js";
 import { useSpeechRecognition } from "./components/hooks/useSpeechRecognition";
+import MainForm from "./components/MainForm"; // Ensure MainForm is imported
 
 
 function App() {
@@ -17,15 +18,19 @@ function App() {
   const [zone, setZone] = useState("");
   const [event, setEvent] = useState("");
   const [result, setResult] = useState(null);
+  const [message, setMessage] = useState(""); // State to manage the message
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+
 const {
-  transcript,
   isListening,
   startListening,
   stopListening,
-  setTranscript
-} = useSpeechRecognition();
-  const [isRecording, setIsRecording] = useState(false);
-
+} = useSpeechRecognition({
+  onResult: (text) => {
+    setProductName(text); // Update the Product Name field with the transcription
+  }
+});
   async function startRecording() {
     setIsRecording(true);
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -41,57 +46,47 @@ const {
 
   
 
-  async function handleSubmit() {
+  async function handleSubmit({ product, location, event }) { // Update to accept form data
     let transcript = "";
-  try {
-    const data = await sendEvent({
-      product: productName,
-      zone,
-      event,
-      transcript
-    });
+    try {
+      const data = await sendEvent({
+        product,
+        zone: location,
+        event,
+        transcript,
+        setMessage, // Pass setMessage to sendEvent
+      });
 
-    setResult(data);
-  } catch (err) {
-    console.error(err);
-  }
+      setResult(data);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Stack spacing={2}>
-        <TextField label="Product Name" value={productName} onChange={(e) => setProductName(e.target.value)} />
-        <TextField label="Zone" value={zone} onChange={(e) => setZone(e.target.value)} />
-        <TextField label="Event" value={event} onChange={(e) => setEvent(e.target.value)} />
-
-      
-
-        <Button variant="contained" onClick={handleSubmit}>
-          Submit
+        <MainForm
+          onSubmit={handleSubmit}
+          message={message}
+          productName={productName} // Pass productName to MainForm
+          setProductName={setProductName} // Pass setProductName to MainForm
+        />
+        <Button
+          variant="contained"
+          color={isListening ? "error" : "primary"}
+          onClick={isListening ? stopListening : startListening}
+        >
+          {isListening ? "Stop Listening" : "Start Voice Input"}
         </Button>
-
-<Button
-  variant="contained"
-  color={isListening ? "error" : "primary"}
-  onClick={isListening ? stopListening : startListening}
->
-  {isListening ? "Stop Listening" : "Start Voice Input"}
-</Button>
-
-<TextField
-  label="Voice Transcript"
-  value={transcript}
-  multiline
-  rows={3}
-  fullWidth
-  margin="normal"
-/>
-
-
-        {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+        {/* ...existing code... */}
       </Stack>
     </Container>
+    
   );
+
+  
+  
 }
 
 export default App;

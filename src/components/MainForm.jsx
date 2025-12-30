@@ -1,35 +1,28 @@
-
-
 import { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Alert, Stack } from "@mui/material";
 
-
-
-
-
-export default function MainForm({ onSubmit }) {
-  const [product, setProduct] = useState("");
+export default function MainForm({ onSubmit, message, productName, setProductName }) {
   const [location, setLocation] = useState("");
   const [event, setEvent] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ product, location, event });
-setProduct("");
-setLocation("");
-setEvent("");
+    onSubmit({ product: productName, location, event });
+    setProductName("");
+    setLocation("");
+    setEvent("");
   };
 
   return (
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ maxWidth: 400, mx: "auto", mt: 4 }}
+      sx={{ maxWidth: 600, mx: "auto", mt: 4 }}
     >
       <TextField
         label="Product Name"
-        value={product}
-        onChange={(e) => setProduct(e.target.value)}
+        value={productName}
+        onChange={(e) => setProductName(e.target.value)}
         fullWidth
         margin="normal"
       />
@@ -58,8 +51,12 @@ setEvent("");
       >
         Submit
       </Button>
+
+      {message && ( // Display the message if it exists
+        <Alert severity="success" sx={{ mt: 2 }}>
+          {message}
+        </Alert>
+      )}
     </Box>
   );
 }
-
-

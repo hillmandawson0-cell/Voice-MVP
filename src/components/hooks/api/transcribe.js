@@ -5,12 +5,13 @@ returning data
 no ui logic
 no event handlers
 */
-
+import { useState } from "react";
 export async function sendEvent({
   product,
   zone,
   event,
-  transcript
+  transcript,
+  setMessage
 }) {
   const payload = {
     product_name: product || undefined,
@@ -32,8 +33,12 @@ export async function sendEvent({
 
   if (!response.ok) {
     throw new Error("API request failed");
+  } else {
+    setMessage("API sent successfully"); // Ensure setMessage is called here
+    return console.log("all good");
   }
 
-  return response.json();
 }
+
+
 
