@@ -71,15 +71,10 @@ const {
           message={message}
           productName={productName} // Pass productName to MainForm
           setProductName={setProductName} // Pass setProductName to MainForm
+          isListening={isListening} // Pass isListening to MainForm
+          startListening={startListening} // Pass startListening to MainForm
+          stopListening={stopListening} // Pass stopListening to MainForm
         />
-        <Button
-          variant="contained"
-          color={isListening ? "error" : "primary"}
-          onClick={isListening ? stopListening : startListening}
-        >
-          {isListening ? "Stop Listening" : "Start Voice Input"}
-        </Button>
-        {/* ...existing code... */}
       </Stack>
     </Container>
     

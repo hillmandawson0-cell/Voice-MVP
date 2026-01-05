@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { TextField, Button, Box, Alert, Stack } from "@mui/material";
+import { TextField, Button, Box, Alert, Stack, InputAdornment, IconButton } from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 
-export default function MainForm({ onSubmit, message, productName, setProductName }) {
+export default function MainForm({ onSubmit, message, productName, setProductName, isListening, startListening, stopListening }) {
   const [location, setLocation] = useState("");
   const [event, setEvent] = useState("");
 
@@ -25,6 +27,18 @@ export default function MainForm({ onSubmit, message, productName, setProductNam
         onChange={(e) => setProductName(e.target.value)}
         fullWidth
         margin="normal"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={isListening ? stopListening : startListening}
+                color={isListening ? "error" : "default"}
+              >
+                {isListening ? <MicOffIcon /> : <MicIcon />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
 
       <TextField
