@@ -1,5 +1,5 @@
 // src/api/eventsApi.js
-export async function sendEvent({ productName, location, event, transcript }) {
+export async function sendEvent({ productName, location, event, transcript, image }) {
   const response = await fetch(
     "https://ni8j6iezcc.execute-api.us-east-1.amazonaws.com/prod",
     {
@@ -11,6 +11,7 @@ export async function sendEvent({ productName, location, event, transcript }) {
           location: location || undefined,
           event: event || undefined,
           transcript: transcript || undefined,
+          image: image || undefined,
         },
       }),
     }

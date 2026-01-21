@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CameraCapture from "./CameraCapture";
 import { TextField, Button, Box, Alert, Stack, InputAdornment, IconButton } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
@@ -6,13 +7,15 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 export default function MainForm({ onSubmit, message, productName, setProductName, isListening, startListening, stopListening }) {
   const [location, setLocation] = useState("");
   const [event, setEvent] = useState("");
+  const [image, setImage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ product: productName, location, event });
+    onSubmit({ product: productName, location, event, image });
     setProductName("");
     setLocation("");
     setEvent("");
+    setImage(null);
   };
 
   return (
@@ -57,11 +60,15 @@ export default function MainForm({ onSubmit, message, productName, setProductNam
         margin="normal"
       />
 
+
+      <CameraCapture onCapture={setImage} />
+
       <Button
         variant="contained"
         type="submit"
         fullWidth
         sx={{ mt: 2 }}
+        disabled={!productName && !location && !event && !image}
       >
         Submit
       </Button>
